@@ -2,8 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const morgan=require('morgan');
-const Blog= require('./models/blog');
+
 const { result } = require('lodash');
+
+const blogRoutes = require('./routes/blogRoutes');
 
 const dbURI = 'mongodb+srv://NehaPendem:pinklumos@cluster0-h9xzy.mongodb.net/node-db?retryWrites=true&w=majority';
 //connect to mongoDB
@@ -18,7 +20,9 @@ app.set('view engine','ejs');
 //mongoose and mongo sandbox routes
 
 
+//blogroutes
 
+app.use('/blogs',blogRoutes);
 
 
 
@@ -40,57 +44,7 @@ app.get('/about',(req,res) =>{
     res.render('about',{title: 'About'});
 });
 
-//blog routes
 
-app.get('/blogs',(req,res)=>{
-    Blog.find().sort({ createdAt: -1 }) //blogs shown in descending order of insertion
-        .then((result)=>{
-            res.render('index',{title: 'All Blogs',blogs:result});
-        })
-        .catch((err)=>{
-            console.log(err);
-        })
-});
-
-app.post('/blogs',(req,res)=>{
-    const blog=new Blog(req.body);
-    blog.save()
-        .then((result)=>{
-            res.redirect('/blogs');
-        })
-        .catch((err)=>{
-            console.log(err);
-        })
-});
-
-app.get('/blogs/:id',(req,res)=>{
-    const id = req.params.id;
-    Blog.findById(id)
-        .then((result)=>{
-            res.render('details',{title:'Blog Details',blog:result});
-        })
-        .catch((err)=>{
-            console.log(err);
-        })
-});
-
-app.delete('/blogs/:id',(req,res)=>{
-    const id= req.params.id;
-
-    Blog.findByIdAndDelete(id)
-        .then(result =>{
-            //send json
-
-            res.json({ redirect: '/blogs' })
-        })
-        .catch(err => {
-            console.log(err);
-        })
-});
-
-app.get('/blogs/create',(req,res)=>{
-    res.render('create',{title: 'Create a New Blog'});
-});
 
 //404 page
 
