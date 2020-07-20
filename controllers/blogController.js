@@ -4,7 +4,7 @@ const Blog= require('../models/blog');
 const blog_index = (req,res)=>{
     Blog.find().sort({ createdAt: -1 }) //blogs shown in descending order of insertion
     .then((result)=>{
-        res.render('index',{title: 'All Blogs',blogs:result});
+        res.render('blogs/index',{title: 'All Blogs',blogs:result});
     })
     .catch((err)=>{
         console.log(err);
@@ -16,7 +16,7 @@ const blog_details = (req,res) =>{
     const id = req.params.id;
     Blog.findById(id)
         .then((result)=>{
-            res.render('details',{title:'Blog Details',blog:result});
+            res.render('blogs/details',{title:'Blog Details',blog:result});
         })
         .catch((err)=>{
             console.log(err);
@@ -24,7 +24,7 @@ const blog_details = (req,res) =>{
 }
 
 const blog_create_get  = (req,res)=>{
-    res.render('create',{title: 'Create a New Blog'});
+    res.render('blogs/create',{title: 'Create a New Blog'});
 }
 
 const blog_create_post  = (req,res)=>{
